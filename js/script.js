@@ -356,3 +356,212 @@ eAgoraResult.f2() // exibi: 3
 // return(f1,f2) é o clousure, que guarda o estado de cont
     // quando a função externa termina o resultado é 3
     
+//--------------------------------------------------------------------------------------
+//-------------------------------------------------------------------
+// 2 - JSON
+
+// let pessoa = {
+//     nome: "João",
+//     idade: 17,
+// }
+
+// // outro padrão é: "nome": "joão" usando as aspas
+// // idade: 17, --> a última virgula é um utilitário para que se necessário adicionar mais elementos não vou precisar colocar a , quando for adicionar mais um elemento
+//     // se idade: 17 sem a vírugla não é mais um JSON válido
+//     // mas tem biblioteca que vai reclamar apesar da especificação falar que não tem problema
+
+// //o acesso a propriedades pode ser feito com ponto
+// console.log("Me chamo " + pessoa.nome);
+// //e com [] também
+// console.log("Tenho " + pessoa["idade"] + " anos");
+//     // apesar no JSON idade não estar entre "" na recuperação do valor precisa estar entre ""
+// // usar [] é preferencial ao ponto final que é um operador da linguagem
+
+// //---------------------------------------------------------------------
+// // 2.1.2
+// let pessoaComEndereco = {
+//     nome: "Maria",
+//     idade: 21,
+//     endereco: {
+//         logradouro: "Rua B",
+//         numero: 121,
+//         },
+//     };
+// console.log(
+//     `Sou ${pessoaComEndereco.nome},
+//     tenho ${pessoaComEndereco.idade} anos
+//     e moro na rua ${pessoaComEndereco.endereco["logradouro"]}
+//     número ${pessoaComEndereco["endereco"]["numero"]}`
+// ); 
+// // usar ç é possível mas não devemos usar por possível conflito de identificaçã de caractereres em unicode para outros padrões
+// // não devemos ter propriedades com . no nome pois é como acessamos os elementos, como mazei.nome não é válido
+
+// ------------------------------------
+// 2.1.3
+let concessionaria = {
+    cnpj: "00011122210001-45",
+    endereco: {
+        logradouro: "Rua A",
+        numero: 10,
+        bairro: "Vila J",
+    },
+    veiculos: [
+        {
+            marca: "Ford",
+            modelo: "Ecosport",
+            anoDeFabricacao: 2018,
+        },
+        {
+            marca: "Chevrolet",
+            modelo: "Onix",
+            anoDeFabricacao: 2020,
+        },
+        {
+            marca: "Volkswagen",
+            modelo: "Nivus",
+            anoDeFabricacao: 2020,
+        },
+    ],
+};
+for (let veiculo of concessionaria.veiculos) {
+    console.log(`Marca: ${veiculo.marca}`);
+    console.log(`Modelo: ${veiculo.modelo}`);
+    console.log(`Ano de Fabricação:
+        ${veiculo.anoDeFabricacao}`);
+ }
+ // objetos imbutidos -> veiculos lista de objetos imbutido 
+    // no for já está o concessionaria então acesso os elementos do veiculo direto
+
+//---------------------------------------------
+// 2.1.4
+
+let calculadora = {
+    //pode ser arrow function
+    soma: (a, b) => a + b,
+    //e função comum também
+    subtracao: function (a, b) {
+        return a - b;
+    },
+};
+console.log(`2 + 3 = ${calculadora.soma(2, 3)}`);
+console.log(`2 - 3 = ${calculadora.subtracao(2, 3)}`);
+
+// No java não podemos fazer isso pois métodos de classe não são de priemira classe
+// funções, métodos e atributos não podem ser passadas como parâmetro, valor de elementos, etc
+// no JS funciona, mas é importante notar que sempre preciso estar atento a passar os valores iniciais na chamada
+
+let calculadora2 = {
+    //pode ser arrow function
+    soma: 2,
+    soma: (a, b) => a + b,
+    //e função comum também
+    subtracao: function (a, b) {
+        return a - b;
+    },
+};
+console.log(`2 + 3 = ${calculadora.soma(2, 3)}`);
+console.log(`2 - 3 = ${calculadora.subtracao(2, 3)}`);
+
+// ainda usa a função por que aparece por úlitmo
+
+let calculadora3 = {
+    //pode ser arrow function
+    soma: (a, b) => a + b,
+    //e função comum também
+    subtracao: function (a, b) {
+        return a - b;
+    },
+
+    soma: 2,
+};
+console.log(calculadora.soma); // dá certo
+console.log(`2 + 3 = ${calculadora.soma(2, 3)}`);
+console.log(`2 - 3 = ${calculadora.subtracao(2, 3)}`);
+
+// nesse caso o que está por último que conta, e dará erro por causa de sobrescrita e tentei passar valores para um elemento que não é função
+
+//--------------------------------------------------
+//3 -> Síncrono e Assíncrono
+// console.log('Eu primeiro')
+// console.log("Agora eu")
+// console.log("Sempre vou ser a última...:(")
+// // o padrão é ser single thread, ou seja, as instruções são executadas uma após a outra
+
+// const a = 2 + 7
+// const b = 5
+// //só faz sentido se os valores a e b já estiverem disponíveis
+// console.log(a + b) // essa linha depende das variáveis a e b acima, e devem ser estabelecidas antes
+// // aqui é sequêncial
+//     // mas poderia ser assíncrono, através de uma barreira, bloquenado o processamento da 493 até a 490 e a 491 acabarem o processamento
+
+//-----------------------------------------------------------------------------------------------
+//3.1.3
+// function demorada(tempo){
+//     console.log(`demorada: ${tempo}`)
+//     const atualMaistempo = new Date().getTime() + tempo
+//     while (new Date().getTime() <= atualMaistempo);
+//     const d = 8 + 4
+//     return d
+// }
+// const a = 2 + 3
+// const b = 5 + 9
+// setTimeout(() => {
+//     const d = demorada(2000)
+//     console.log(`demorada(2000) termino: ${d}`)
+// }, 2000) 
+// setTimeout(() => {
+//     const d = demorada(1000)
+//     console.log(`demorada(1000) termino: ${d}`)
+// }, 1000) 
+
+// const e = 2 + a + b
+// console.log(`e: ${e}`)
+// // execução:
+//     // e: 23
+//     // demorada: 1000
+//     // demorada(1000) terminou: 12
+//     // demorada: 2000
+//     // demorada(2000) terminou: 12
+// // mesmo que a demorada(1000) entrou por último terminou antes então passa na frente
+
+//--------------------------------------------------------------------------------------------
+//3.2.1
+const fs = require('fs');
+
+const abrirArquivo = function (nomeArquivo) {
+    const exibirConteudo = function (erro, conteudo) {
+        if (erro) {
+            console.log(`Deu erro: ${erro}`);
+        } else {
+            console.log(`Conteúdo lido: ${conteudo.toString()}`);
+            const dobro = +conteudo.toString() * 2;
+            const finalizar = function (erro) {
+                if (erro) {
+                    console.log('Deu erro tentando salvar o dobro');
+                } else {
+                    console.log('Salvou o dobro com sucesso');
+                    // ex de triplo
+                    fs.readFile('dobro.txt', (erro, conteudo) => {
+                        if (erro) {
+                            console.log('Deu erro ao ler o dobro.txt');
+                        } else {
+                            console.log(`Conteúdo do dobro.txt: ${conteudo.toString()}`);
+                            const triplo = +conteudo.toString() * 3;
+                            fs.writeFile('triplo.txt', triplo.toString(), (erroEscrita) => {
+                                if (erroEscrita) {
+                                    console.log('Deu erro tentando salvar o triplo');
+                                } else {
+                                    console.log('Salvou o triplo com sucesso');
+                                }
+                            });
+                        }
+                    });
+                }
+            };
+            fs.writeFile('dobro.txt', dobro.toString(), finalizar);
+        }
+    };
+    fs.readFile(nomeArquivo, exibirConteudo);
+};
+
+abrirArquivo('arquivo.txt');
