@@ -565,3 +565,160 @@ const abrirArquivo = function (nomeArquivo) {
 };
 
 abrirArquivo('arquivo.txt');
+//------------------------------------------------
+//--------------------------------------------------------------------------------------------
+//3.2.1
+const fs = require('fs');
+
+const abrirArquivo2 = function (nomeArquivo) {
+    const exibirConteudo = function (erro, conteudo) {
+        if (erro) {
+            console.log(`Deu erro: ${erro}`);
+        } else {
+            console.log(`Conteúdo lido: ${conteudo.toString()}`);
+            const dobro = +conteudo.toString() * 2;
+            const finalizar = function (erro) {
+                if (erro) {
+                    console.log('Deu erro tentando salvar o dobro');
+                } else {
+                    console.log('Salvou o dobro com sucesso');
+                    // ex de triplo
+                    fs.readFile('dobro.txt', (erro, conteudo) => {
+                        if (erro) {
+                            console.log('Deu erro ao ler o dobro.txt');
+                        } else {
+                            console.log(`Conteúdo do dobro.txt: ${conteudo.toString()}`);
+                            const triplo = +conteudo.toString() * 3;
+                            fs.writeFile('triplo.txt', triplo.toString(), (erroEscrita) => {
+                                if (erroEscrita) {
+                                    console.log('Deu erro tentando salvar o triplo');
+                                } else {
+                                    console.log('Salvou o triplo com sucesso');
+                                }
+                            });
+                        }
+                    });
+                }
+            };
+            fs.writeFile('dobro.txt', dobro.toString(), finalizar);
+        }
+    };
+    fs.readFile(nomeArquivo, exibirConteudo);
+};
+
+abrirArquivo2('arquivo.txt');
+
+//-------------------------------------------------------
+function calculoDemorado(numero) {
+    return new Promise(function (resolve, reject) {
+    let res = 0;
+    for (let i = 1; i <= numero; i++) {
+        res += i;
+    }
+    resolve(res);
+    });
+    }
+    calculoDemorado(10).then( (resultado) => {
+        console.log(resultado)
+})
+//---------------------------------
+//3.3.2
+
+function calculoRapidinho (numero){
+    return Promise.resolve((numero * (numero + 1)) / 2);
+}
+calculoRapidinho (10).then(resultado =>{
+    console.log (resultado)
+})
+//Executa primeiro, mesmo que a promise já esteja fullfilled
+console.log('Esperando...')
+//-----------------
+//3.3.3
+function calculoRapidinho(numero) {
+    return numero >= 0
+    ? Promise.resolve((numero * (numero + 1)) / 2)
+    : Promise.reject("Somente valores positivos, por favor");
+}
+
+calculoRapidinho(10)
+.then((resultado) => {
+    console.log(resultado);
+})
+.catch((err) => {
+    console.log(err);
+});
+calculoRapidinho(-1)
+.then((resultado) => {
+    console.log(resultado);
+})
+.catch((err) => {
+    console.log(err);
+});
+console.log("esperando...");
+    
+//---------------------
+//3.3.6
+
+async function hello(nome) {
+    return "Oi, " + nome;
+}
+const boasVindas = hello("João");
+console.log(boasVindas);
+boasVindas.then((res) => console.log(res));
+
+// Promise {oi, joão}
+//oi, joão
+
+//--------------------------------------------
+//3.3.7
+
+function fatorial(n) {
+    if (n < 0) return Promise.reject("Valor não pode ser negativo");
+    let res = 1;
+    for (let i = 2; i <= n; i++) res *= i;
+    return Promise.resolve(res);
+}
+//----------
+//3.3.8    
+function chamadaComThenCatch() {
+    fatorial(5)
+    .then((res) => console.log(res))
+    .catch((res) => console.log(res));
+
+    fatorial(-1)
+    .then((res) => console.log(res))
+    .catch((res) => console.log(res));
+}
+chamadaComThenCatch();
+
+//----------------------------
+//3.3.9
+//para usar await tem que ser async
+async function chamadaComAwait() {
+//note que não há paralelismo implícito
+//somente haverá paralelismo se a função chamada
+//utilizar explicitamente
+    const f1 = await fatorial(5);
+    console.log(f1); //120
+    
+    const f2 = await fatorial(-1);
+    console.log(f2); // da erro pois não tem o then
+}
+chamadaComAwait();
+
+
+
+async function chamadaComAwait() {
+    try{
+        const f1 = await fatorial(5);
+        console.log(f1); //120
+        
+        const f2 = await fatorial(-1);
+        console.log(f2); // da erro pois não tem o then
+    } catch (erro){
+        console.log(erro);
+        // tenho que declarar no catch se não fica undefinied e o consolo log não executa, daria erro
+    }
+
+}
+chamadaComAwait();
