@@ -1,6 +1,7 @@
-const express = require('express');
-const app = express()
-
+const express = require ('express');
+const app = express();
+app.use(express.json());
+const lembretes = {};
 
 // definição de endpoints
 //GET no padrão /lembretes
