@@ -13,9 +13,12 @@ const funcoes = {
         const observacoes = baseConsulta[observacao.lembreteId]['observacoes'] || [];
         observacoes.push(observacao);
         baseConsulta[observacao.lembreteId]['observacoes'] = observacoes;
-    }
-        
-        
+    },
+    ObservacaoAtualizada: (observacao) => {
+        const observacoes = baseConsulta[observacao.lembreteId]["observacoes"];
+        const indice = observacoes.findIndex((o) => o.id === observacao.id);
+        observacoes[indice] = observacao;
+    },         
 }
 
 //GET /lembretes
@@ -28,7 +31,9 @@ app.get('/lembretes', (req, res) => { // recebe a requisição e res permite res
 // vai se acionada pelo barramento de eventos, Serve para receber um evento e acessa a base para cadastra-lo para consulta futura
 app.post('/eventos', (req, res) => {
     const { tipo, dados } = req.body;
-    funcoes[req.body.tipo](req.body.dados); // uso [] para acessar alguem que existe dentro do objeto java script
+    try {
+        funcoes[req.body.tipo](req.body.dados);
+    } catch (err) {} // uso [] para acessar alguem que existe dentro do objeto java script
     // () chama função 
     res.status(200).send(baseConsulta);
 });
