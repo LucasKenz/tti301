@@ -1,7 +1,7 @@
 const express = require("express");
 const axios = require("axios");
 const app = express();
-app.use(express.json());
+app.use(express.json()); // middleware para ler JSON
 const palavraChave = "importante";
 
 const funcoes = {
