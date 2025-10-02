@@ -5,7 +5,7 @@ app.use(express.json()); // middleware para ler JSON
 const palavraChave = "importante";
 
 const funcoes = {
-    observacaoCriada: (observacao) => {
+    ObservacaoCriada: (observacao) => {
         observacao.status = observacao.texto.includes(palavraChave)?"importante":"comum";
         axios.post("http://localhost:10000/eventos", {
             tipo: "ObservacaoClassificada",

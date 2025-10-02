@@ -23,6 +23,7 @@ const funcoes = {
         });
     }
 };
+// bloco de funções que deixa eu lidar com status
 
 //:id é um placeholder
 //exemplo: /lembretes/123456/observacoes
@@ -33,7 +34,7 @@ app.post('/lembretes/:id/observacoes', async (req, res) => {
 //req.params dá acesso à lista de parâmetros da URL
     const observacoesDoLembrete =
         observacoesPorLembreteId[req.params.id] || []; // se existe ou se vamos criar um vazio novo
-    observacoesDoLembrete.push({ id: idObs, texto, status: "agaurdando" });
+    observacoesDoLembrete.push({ id: idObs, texto, status: "aguardando" });
     observacoesPorLembreteId[req.params.id] =
         observacoesDoLembrete;
     
@@ -50,7 +51,7 @@ app.post('/lembretes/:id/observacoes', async (req, res) => {
 // tratamento do /eventos
 app.post("/eventos", (req, res) => {
     try {
-        funcoes[req.body.tipo](req.body.dados);
+        funcoes[req.body.tipo](req.body.dados); // mapa de funções para ver qual função usar
       } catch (err) {}
       res.status(200).send({
         msg: "ok"
