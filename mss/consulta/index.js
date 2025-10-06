@@ -40,4 +40,14 @@ app.post('/eventos', (req, res) => {
 
 
 const port = 6000;
-app.listen(port, () => console.log(`Consulta na porta ${port}.`));
+app.listen(port, async () => {
+    console.log(`Consulta na porta ${port}.`);
+    const resp = await axios.get("http://localhost:10000/eventos");
+    resp.data.forEach((valor, indice, colecao) => {
+        try {
+            funcoes[valor.tipo](valor.dados); // ativa o mapa de funções desse arquivo
+        } catch (err) {}
+    });
+});
+// comunicação com o barramento de eventos
+// se tipo for undefinido, vai para o catch err
