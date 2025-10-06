@@ -34,7 +34,7 @@ app.post('/lembretes/:id/observacoes', async (req, res) => {
 //req.params dá acesso à lista de parâmetros da URL
     const observacoesDoLembrete =
         observacoesPorLembreteId[req.params.id] || []; // se existe ou se vamos criar um vazio novo
-    observacoesDoLembrete.push({ id: idObs, texto, status: "agaurdando" });
+    observacoesDoLembrete.push({ id: idObs, texto, status: "aguardando" });
     observacoesPorLembreteId[req.params.id] =
         observacoesDoLembrete;
     
