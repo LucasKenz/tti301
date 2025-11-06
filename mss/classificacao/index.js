@@ -9,7 +9,7 @@ const palavraChave = "importante";
 const funcoes = {
     ObservacaoCriada: (observacao) => {
         observacao.status = observacao.texto.includes(palavraChave)?"importante":"comum";
-        axios.post("http://localhost:10000/eventos", {
+        axios.post("http://barramento-de-eventos-service:10000/eventos", {
             tipo: "ObservacaoClassificada",
             dados: observacao,
         });
@@ -28,7 +28,7 @@ app.listen(7000, () => console.log ("Classificação. Porta 7000"));
 
 app.listen(6000, async () => {
     console.log("Consultas. Porta 6000");
-    const resp = await axios.get("http://localhost:10000/eventos");
+    const resp = await axios.get("http://barramento-de-eventos-service:10000/eventos");
     resp.data.forEach((valor, indice, colecao) => {
         try {
             funcoes[valor.tipo](valor.dados); // ativa o mapa de funções desse arquivo

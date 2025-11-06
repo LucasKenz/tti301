@@ -42,7 +42,7 @@ app.post('/eventos', (req, res) => {
 const port = 6000;
 app.listen(port, async () => {
     console.log(`Consulta na porta ${port}.`);
-    const resp = await axios.get("http://localhost:10000/eventos");
+    const resp = await axios.get("http://barramento-de-eventos-service:10000/eventos");
     resp.data.forEach((valor, indice, colecao) => {
         try {
             funcoes[valor.tipo](valor.dados); // ativa o mapa de funções desse arquivo
